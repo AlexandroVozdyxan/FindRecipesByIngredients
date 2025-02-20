@@ -6,8 +6,8 @@ import sqlite3
 import random
 
 app = Flask(__name__)
-app.secret_key = ''
-API_KEY = '0d2447ce9f06417e8983aadfd2fec8c1'
+app.secret_key = 'F(HUU487gg8f*G8h*Hf48e78f8h4h87h87d8hdfh88h8s8fr8h48hgfy8uh'
+API_KEY = ''
 RECIPES_PER_PAGE = 5
 def get_recipes(ingredients):
     url = f'https://api.spoonacular.com/recipes/findByIngredients?ingredients={ingredients}&number=100&apiKey={API_KEY}'
