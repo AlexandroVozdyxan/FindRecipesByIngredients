@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search for recipes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+     <h2>Enter the ingredients:</h2>
+    <form method="POST">
+        <input type="text" name="ingredients" placeholder="For example: eggs, flour, milk">
+        <button type="submit">Find recipes</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite Recipes</title>
+    <style>
+        body {
+            background: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        h1, h2 {
+            color: white;
+        }
+        p {
+            color: whitesmoke;
+        }
+        a {
+            color: purple;
+        }
+        span {
+            color: white;
+        }
+        button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: darkred;
+        }
+    </style>
+    <script>
+        function removeFromFavorites(id) {
+            fetch('/remove_favorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <h1>⭐ Favorite Recipes</h1>
+
+    {% if favorites %}
+        <ul>
+            {% for recipe in favorites %}
+                <li>
+                    <h2>{{ recipe.title }}</h2>
+                    <img src="{{ recipe.image }}" alt="{{ recipe.title }}" width="200">
+                    <p>
+                        <a href="https://spoonacular.com/recipes/{{ recipe.title | replace(' ', '-') }}-{{ recipe.id }}">
+                            Recipe Details
+                        </a>
+                    </p>
+                    <button onclick="removeFromFavorites('{{ recipe.id }}')">❌ Remove</button>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No favorite recipes yet.</p>
+    {% endif %}
+
+    <br>
+    <a href="/">🔙 Back to main page</a>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipes for {{ ingredients }}</title>
+    <style>
+        body {
+            background: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        h1, h2 {
+            color: white;
+        }
+        p {
+            color: white;
+        }
+        a {
+            color: purple;
+        }
+        span {
+            color: white;
+        }
+        button {
+            background-color: purple;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: darkviolet;
+        }
+    </style>
+    <script>
+        function addToFavorites(title, image, id) {
+            fetch('/add_favorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title: title, image: image, id: id })
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <h1>Recipes for "{{ ingredients }}"</h1>
+
+    {% if recipes %}
+        <ul>
+            {% for recipe in recipes %}
+                <li>
+                    <h2>{{ recipe.title }}</h2>
+                    <img src="{{ recipe.image }}" alt="{{ recipe.title }}" width="200">
+                    <p>
+                        <a href="https://spoonacular.com/recipes/{{ recipe.title | replace(' ', '-') }}-{{ recipe.id }}">
+                            Recipe Details
+                        </a>
+                    </p>
+                    <button onclick="addToFavorites('{{ recipe.title }}', '{{ recipe.image }}', '{{ recipe.id }}')">
+                        ⭐ Add to Favorites
+                    </button>
+                    <p>Calories: {{ recipe.nutrition.calories }} kcal</p>
+                    <p>Protein: {{ recipe.nutrition.protein }}g</p>
+                    <p>Fat: {{ recipe.nutrition.fat }}g</p>
+                    <p>Carbs: {{ recipe.nutrition.carbs }}g</p>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <!-- NAVIGATION -->
+        <div>
+            {% if page > 1 %}
+                <a href="{{ url_for('results', page=page-1, ingredients=ingredients) }}">⬅ Previous</a>
+            {% endif %}
+
+            <span>Page {{ page }} of {{ total_pages }}</span>
+
+            {% if page < total_pages %}
+                <a href="{{ url_for('results', page=page + 1, ingredients=ingredients) }}">Next ➡</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>No recipes found.</p>
+    {% endif %}
+
+    <br>
+    <a href="/">🔙 Back to main page</a> |
+    <a href="/favorites">⭐ View Favorites</a>
+</body>
+</html>
